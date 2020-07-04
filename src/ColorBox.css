@@ -25,6 +25,9 @@
     border: none;
     opacity: 0;
 }
+.copy-button:hover{
+    cursor: pointer;
+}
 .ColorBox:hover .copy-button{
     opacity: 1;
     transition: 0.4s;
@@ -98,6 +101,5 @@
 }
 .copy-msg p{
     font-size: 2rem;
-    text-transform: uppercase;
     font-weight: 100;
 }
