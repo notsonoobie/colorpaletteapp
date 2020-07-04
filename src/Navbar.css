@@ -4,7 +4,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    height: 6vh;
+    height: 5vh;
 }
 .logo{
     margin-right: 15px;
@@ -23,7 +23,7 @@
 
 .slider{
     width: 340px;
-    margin: 0 10px;
+    margin: 0 20px;
     display: inline-block;
 }
 .select-container{
