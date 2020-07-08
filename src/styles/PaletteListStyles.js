@@ -17,7 +17,23 @@ export default {
         color: "white",
         width: "100%",
         display: "flex",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        alignItems: "center",
+        "& a": {
+            fontFamily: "Roboto",
+            textDecoration: "none",
+        }
+    },
+    btn: {
+        background: "linear-gradient(45deg,#fe6b8b 30%,#ff8e53 90%)",
+        borderRadius: "3px",
+        border: "none",
+        color: "white",
+        height: "48px",
+        padding: "0 30px",
+        boxShadow: "0 3px 5px 2px rgba(255,105,135,.3)",
+        wordSpacing: "2px",
+        letterSpacing: "1px"
     },
     palettes: {
         boxSizing: "border-box",
