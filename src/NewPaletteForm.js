@@ -85,11 +85,14 @@ class NewPaletteForm extends Component {
 			open: false,
 			color: "red",
       colors: [],
-      newName: ""
+      newColorName: "",
+      newPaletteName: ""
 		}
 		this.handleChange = this.handleChange.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.handleNameChange = this.handleNameChange.bind(this)
+    this.handleSave = this.handleSave.bind(this)
+    this.deleteColorBox = this.deleteColorBox.bind(this)
   }
   componentDidMount() {
     ValidatorForm.addValidationRule('isColorNameUnique', (val) => {
@@ -98,10 +101,23 @@ class NewPaletteForm extends Component {
     ValidatorForm.addValidationRule('isColorUnique', (val) => {
       return this.state.colors.every((elm) => elm.color !== this.state.color )
     })
+    ValidatorForm.addValidationRule('isPaletteNameUnique', (val) => {
+      return this.props.palettes.every(({paletteName}) => paletteName.toLowerCase() !== val.toLowerCase() )
+    })
+  }
+  handleSave(e) {
+    let newName = this.state.newPaletteName
+    const newPalette = {
+      paletteName: newName,
+      id: newName.toLowerCase().replace(/ /g,'-'),
+      colors: this.state.colors
+    }
+    this.props.savePalette(newPalette)
+    this.props.history.push('/')
   }
   handleNameChange(e) {
     this.setState({
-      newName : e.target.value
+      [e.target.name] : e.target.value
     })
   }
 	handleChange(c, e) {
@@ -112,85 +128,94 @@ class NewPaletteForm extends Component {
 	handleClick() {
     const newColor = {
       color: this.state.color,
-      name: this.state.newName
+      name: this.state.newColorName
     }
 		this.setState({
       colors: [...this.state.colors, newColor],
-      newName: ""
+      newColorName: ""
 		})
 	}
-    handleDrawerOpen = () => {
-        this.setState({ open: true });
-    };
-    
-    handleDrawerClose = () => {
-        this.setState({ open: false });
-    };
-    render() {
-        const { classes } = this.props;
-        const { open } = this.state;
-        return (
-            <div className={classes.root}>
-                <CssBaseline />
-                <AppBar
-                position='fixed'
-                className={classNames(classes.appBar, {
-                    [classes.appBarShift]: open
-                })}
-                >
-                    <Toolbar disableGutters={!open}>
-                        <IconButton
-                        color='inherit'
-                        aria-label='Open drawer'
-                        onClick={this.handleDrawerOpen}
-                        className={classNames(classes.menuButton, open && classes.hide)}
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                        <Typography variant='h6' color='inherit' noWrap>
-                        Persistent drawer
-                        </Typography>
-                    </Toolbar>
-                </AppBar>
-                <Drawer
-                className={classes.drawer}
-                variant='persistent'
-                anchor='left'
-                open={open}
-                classes={{
-                    paper: classes.drawerPaper
-                }}
-                >
-                    <div className={classes.drawerHeader}>
-                        <IconButton onClick={this.handleDrawerClose}>
-                            <ChevronLeftIcon />
-                        </IconButton>
-                    </div>
-                    <Divider />
-                    <Typography variant="h4">Choose Your Color</Typography>
-                    <div>
-                        <Button variant="contained" color="secondary">CLEAR PALETTE</Button>
-                        <Button variant="contained" color="primary">RANDOM COLOR</Button>
-                    </div>
-                    <ChromePicker color={this.state.color} onChangeComplete={this.handleChange} />
-                    <ValidatorForm onSubmit={this.handleClick}>
-                      <TextValidator validators={['required','isColorNameUnique','isColorUnique']} errorMessages={['Input field is required','Please choose a unique name','Color is already taken']} value={this.state.newName} onChange={this.handleNameChange} />
-                      <Button variant="contained" color="primary" type="submit" style={{backgroundColor:this.state.color}}>ADD COLOR</Button>
-                    </ValidatorForm>
-                </Drawer>
-                <main 
-                className={classNames(classes.content, {
-                    [classes.contentShift]: open
-                })}
-                >
-              <div className={classes.drawerHeader} />
-                    <ul className={classes.ulBox}>
-                      {this.state.colors.map(color => <DraggableColorBox color={color.color} name={color.name} />)}
-                    </ul>
-                </main>
-            </div>
-        )
-    }
+  handleDrawerOpen = () => {
+    this.setState({ open: true });
+  };
+  handleDrawerClose = () => {
+    this.setState({ open: false });
+  };
+  deleteColorBox(colorName) {
+    this.setState({
+      colors : this.state.colors.filter(color => colorName !== color.name)
+    })
+  }
+  render() {
+      const { classes } = this.props;
+      const { open } = this.state;
+      return (
+          <div className={classes.root}>
+              <CssBaseline />
+              <AppBar
+              color='default'
+              position='fixed'
+              className={classNames(classes.appBar, {
+                  [classes.appBarShift]: open
+              })}
+              >
+                  <Toolbar disableGutters={!open}>
+                      <IconButton
+                      color='inherit'
+                      aria-label='Open drawer'
+                      onClick={this.handleDrawerOpen}
+                      className={classNames(classes.menuButton, open && classes.hide)}
+                      >
+                          <MenuIcon />
+                      </IconButton>
+                      <Typography variant='h6' color='inherit' noWrap>
+                Persistent drawer
+                      </Typography>
+                      <ValidatorForm onSubmit={this.handleSave}>
+                      <TextValidator label='Palette Name' name='newPaletteName' validators={['required','isPaletteNameUnique']} errorMessages={['Palette name is required','Palette name already taken']} value={this.state.newPaletteName} onChange={this.handleNameChange} />
+                        <Button type="submit" variant='contained' color='primary'>Save Palette</Button>
+                      </ValidatorForm>
+                  </Toolbar>
+              </AppBar>
+              <Drawer
+              className={classes.drawer}
+              variant='persistent'
+              anchor='left'
+              open={open}
+              classes={{
+                  paper: classes.drawerPaper
+              }}
+              >
+                  <div className={classes.drawerHeader}>
+                      <IconButton onClick={this.handleDrawerClose}>
+                          <ChevronLeftIcon />
+                      </IconButton>
+                  </div>
+                  <Divider />
+                  <Typography variant="h4">Choose Your Color</Typography>
+                  <div>
+                      <Button variant="contained" color="secondary">CLEAR PALETTE</Button>
+                      <Button variant="contained" color="primary">RANDOM COLOR</Button>
+                  </div>
+                  <ChromePicker color={this.state.color} onChangeComplete={this.handleChange} />
+                  <ValidatorForm onSubmit={this.handleClick}>
+                    <TextValidator validators={['required','isColorNameUnique','isColorUnique']} errorMessages={['Input field is required','Please choose a unique name','Color is already taken']} value={this.state.newColorName} name="newColorName" onChange={this.handleNameChange} />
+                    <Button variant="contained" color="primary" type="submit" style={{backgroundColor:this.state.color}}>ADD COLOR</Button>
+                  </ValidatorForm>
+              </Drawer>
+              <main 
+              className={classNames(classes.content, {
+                  [classes.contentShift]: open
+              })}
+              >
+            <div className={classes.drawerHeader} />
+                  <ul className={classes.ulBox}>
+                    {this.state.colors.map(color => <DraggableColorBox key={color.name} deleteBox={()=>this.deleteColorBox(color.name)} color={color.color} name={color.name} />)}
+                  </ul>
+              </main>
+          </div>
+      )
+  }
 }
 
 export default withStyles(styles, { withTheme: true })(NewPaletteForm);
