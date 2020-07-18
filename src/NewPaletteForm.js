@@ -91,10 +91,11 @@ class NewPaletteForm extends Component {
     this.clearPalette = this.clearPalette.bind(this)
     this.addRandomColor = this.addRandomColor.bind(this)
   }
-  handleSave(newPaletteName) {
+  handleSave(newPaletteWithEmoji) {
     const newPalette = {
-      paletteName: newPaletteName,
-      id: newPaletteName.toLowerCase().replace(/ /g,'-'),
+      paletteName: newPaletteWithEmoji.paletteName,
+      id: newPaletteWithEmoji.paletteName.toLowerCase().replace(/ /g, '-'),
+      emoji: newPaletteWithEmoji.emo,
       colors: this.state.colors
     }
     this.props.savePalette(newPalette)

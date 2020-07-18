@@ -6,22 +6,39 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
-import { Picker } from 'emoji-mart';
 import 'emoji-mart/css/emoji-mart.css';
+import { Picker } from 'emoji-mart';
 
 
 class NewPaletteMetaForm extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            newPaletteName: ""
+            newPaletteName: "",
+            emojiDialogToggle: false
         }
         this.handleNameChange = this.handleNameChange.bind(this)
+        this.handleForm = this.handleForm.bind(this)
+        this.savePaletteEmoji = this.savePaletteEmoji.bind(this)
     }
     componentDidMount() {
         ValidatorForm.addValidationRule('isPaletteNameUnique', (val) => {
           return this.props.palettes.every(({paletteName}) => paletteName.toLowerCase() !== val.toLowerCase() )
         })
+    }
+    handleForm() {
+        // this.props.hideForm()
+        this.setState({
+            emojiDialogToggle : true
+        })
+    }
+    savePaletteEmoji(emoji) {
+        const emo = emoji.native
+        const newPaletteWithEmoji = {
+            emo,
+            paletteName : this.state.newPaletteName
+        }
+        this.props.handleSave(newPaletteWithEmoji)
     }
     handleNameChange(e) {
         this.setState({
@@ -31,8 +48,11 @@ class NewPaletteMetaForm extends Component {
     render() {
         return (
             <div>
+                <Dialog open={this.state.emojiDialogToggle}>
+                    <Picker onSelect={this.savePaletteEmoji} />
+                </Dialog>
                 <Dialog onClose={this.props.hideForm} open={true} aria-labelledby="form-dialog-title">
-                    <ValidatorForm onSubmit={()=>this.props.handleSave(this.state.newPaletteName)}>
+                    <ValidatorForm onSubmit={this.handleForm}>
                         <DialogTitle id="form-dialog-title">Happy Coloring ❤</DialogTitle>
                         <DialogContent>
                             <DialogContentText>Save your Color Palette</DialogContentText>
