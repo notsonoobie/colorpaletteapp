@@ -2,8 +2,24 @@ import React, { Component } from 'react'
 import Button from '@material-ui/core/Button';
 import { ChromePicker } from "react-color";
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
+import { withStyles } from "@material-ui/core/styles";
 
-
+const styles = {
+    picker: {
+        width: "100% !important",
+        marginTop: "2rem"
+    },
+    addColorBtn: {
+        width: "100%",
+        padding: "1rem",
+        marginTop: "1rem",
+        fontSize: "2rem"
+    },
+    colorInput: {
+        width: "100%",
+        height: "70px"
+    }
+}
 class ChromePickerForm extends Component {
     constructor(props) {
         super(props)
@@ -22,8 +38,7 @@ class ChromePickerForm extends Component {
         ValidatorForm.addValidationRule('isColorUnique', (val) => {
           return this.props.colors.every((elm) => elm.color !== this.state.color )
         })
-      }
-    
+    }
 	handleChange(c, e) {
 		this.setState({
 			color : c.hex
@@ -45,16 +60,16 @@ class ChromePickerForm extends Component {
         this.props.handleClick(newColor)
     }
     render() {
-        const {isPaletteFull} = this.props
+        const {isPaletteFull, classes} = this.props
         return (
             <div>
-                <ChromePicker color={this.state.color} onChangeComplete={this.handleChange} />
+                <ChromePicker className={classes.picker} color={this.state.color} onChangeComplete={this.handleChange} />
                 <ValidatorForm onSubmit={this.handleFormSubmit}>
-                    <TextValidator validators={['required','isColorNameUnique','isColorUnique']} errorMessages={['Input field is required','Please choose a unique name','Color is already taken']} value={this.state.newColorName} name="newColorName" onChange={this.handleNameChange} />
-                    <Button variant="contained" disabled={isPaletteFull} color="primary" type="submit" style={{ backgroundColor: isPaletteFull ? '#cecee2' : this.state.color }}>{isPaletteFull ? 'PALETTE FULL': 'ADD COLOR'}</Button>
+                    <TextValidator placeholder="Color Name" margin="normal" variant="filled" className={classes.colorInput} validators={['required','isColorNameUnique','isColorUnique']} errorMessages={['Input field is required','Please choose a unique name','Color is already taken']} value={this.state.newColorName} name="newColorName" onChange={this.handleNameChange} />
+                    <Button className={classes.addColorBtn} variant="contained" disabled={isPaletteFull} color="primary" type="submit" style={{ backgroundColor: isPaletteFull ? '#cecee2' : this.state.color }}>{isPaletteFull ? 'PALETTE FULL': 'ADD COLOR'}</Button>
                 </ValidatorForm>
             </div>
         )
     }
 }
-export default ChromePickerForm
+export default withStyles(styles)(ChromePickerForm)
