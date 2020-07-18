@@ -49,6 +49,7 @@ class NewPaletteMetaForm extends Component {
         return (
             <div>
                 <Dialog open={this.state.emojiDialogToggle}>
+                    <DialogTitle id="form-dialog-title">Pick an emoji for your Palette</DialogTitle>
                     <Picker onSelect={this.savePaletteEmoji} />
                 </Dialog>
                 <Dialog onClose={this.props.hideForm} open={true} aria-labelledby="form-dialog-title">
