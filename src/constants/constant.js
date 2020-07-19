@@ -1,2 +1,2 @@
-const DRAWER_WIDTH = 400
+const DRAWER_WIDTH = 375
 export default DRAWER_WIDTH

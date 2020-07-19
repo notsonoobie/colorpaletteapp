@@ -1,3 +1,4 @@
+import sizes from './mediaQueryHelpers'
 import DRAWER_WIDTH from '../constants/constant'
 const drawerWidth = DRAWER_WIDTH;
 
@@ -48,7 +49,10 @@ const styles = theme => ({
       display: "flex",
       flexDirection: "column",
       justifyContent: "center",
-      alignItems: "center"
+      alignItems: "center",
+      [sizes.down("md")]: {
+        justifyContent: "flex-start",
+      }
     },
     buttons: {
       width: "100%"

@@ -1,4 +1,5 @@
 import sizes from './mediaQueryHelpers'
+import bg from './bg.svg'
 
 export default {
     root: {
@@ -6,7 +7,11 @@ export default {
         height: "100vh",
         display: "flex",
         alignItems: "flex-start",
-        justifyContent: "center"
+        justifyContent: "center",
+        overflow: "scroll",
+        backgroundColor: "#77aa77",
+        backgroundImage: `url(${bg})`,
+        backgroundSize: "cover"
     },
     container: {
         width: "50%",
@@ -18,7 +23,7 @@ export default {
             width: "80%"
         },
         [sizes.down("xs")]: {
-            width: "70%"
+            width: "85%"
         }
     },
     nav: {
@@ -29,7 +34,12 @@ export default {
         alignItems: "center",
         "& a": {
             fontFamily: "Roboto",
-            textDecoration: "none",
+            textDecoration: "none"
+        },
+        "& h1": {
+            [sizes.down('xs')]: {
+                fontSize: "1.5rem"
+            }
         }
     },
     btn: {
@@ -41,7 +51,17 @@ export default {
         padding: "0 30px",
         boxShadow: "0 3px 5px 2px rgba(255,105,135,.3)",
         wordSpacing: "2px",
-        letterSpacing: "1px"
+        letterSpacing: "1px",
+        [sizes.down('sm')]: {
+            padding: "0 5px",
+            wordSpacing: "1px",
+            letterSpacing: "0.5px"
+        },
+        [sizes.down('xs')]: {
+            padding: "0 7px",
+            wordSpacing: "0.5px",
+            letterSpacing: "0.3px"
+        }
     },
     palettes: {
         boxSizing: "border-box",
