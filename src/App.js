@@ -19,6 +19,7 @@ class App extends Component {
     this.findPalette = this.findPalette.bind(this)
     this.savePalette = this.savePalette.bind(this)
     this.syncLocalStorage = this.syncLocalStorage.bind(this)
+    this.deletePalette = this.deletePalette.bind(this)
   }
   savePalette(newPalette) {
     this.setState({
@@ -28,6 +29,11 @@ class App extends Component {
   syncLocalStorage() {
     window.localStorage.setItem("palettes",JSON.stringify(this.state.palettes))
   }
+  deletePalette(id) {
+    this.setState(prevState => ({
+      palettes : prevState.palettes.filter(palette => palette.id !== id) 
+    }), this.syncLocalStorage)
+  }
   findPalette(id) {
     return this.state.palettes.find( palette => palette.id===id )
   }
@@ -35,7 +41,7 @@ class App extends Component {
     return (
       <Switch>
         <Route exact path='/palette/new' render={(routeProps) => <NewPaletteForm {...routeProps} palettes={this.state.palettes} savePalette={this.savePalette} /> } />
-        <Route exact path="/" render={ (routeProps)=> <PaletteList palettes={this.state.palettes} {...routeProps} /> } />
+        <Route exact path="/" render={ (routeProps)=> <PaletteList palettes={this.state.palettes} deletePalette={this.deletePalette} {...routeProps} /> } />
         <Route exact path="/palette/:id" render={ (routeProps)=> <Palette colors={generatePalette(this.findPalette(routeProps.match.params.id))} /> } />
         <Route exact path="/palette/:id/:colorID" render={ (routeProps) => <SingleColorPalette colorID={routeProps.match.params.colorID} palettes={generatePalette(this.findPalette(routeProps.match.params.id))} /> } />
       </Switch>

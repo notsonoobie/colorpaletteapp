@@ -24,7 +24,7 @@ class PaletteList extends Component {
                         <Link to="/palette/new"><Button variant="contained" color="danger" className={classes.btn} size="medium">Create New Palette</Button></Link>
                     </div>
                     <div className={classes.palettes}>
-                        {palettes.map(p => <MiniPalette {...p} handleClick={()=> this.goToPalette(p.id)} /> )}
+                        {palettes.map(p => <MiniPalette {...p} key={p.id} id={p.id} deletePalette={this.props.deletePalette} handleClick={()=> this.goToPalette(p.id)} /> )}
                     </div>
                 </div>
             </div>
