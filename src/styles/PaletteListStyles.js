@@ -17,10 +17,10 @@ export default {
         display: "flex",
         alignItems: "flex-start",
         justifyContent: "center",
-        overflow: "scroll",
+        overflow: "auto",
         backgroundColor: "#77aa77",
         backgroundImage: `url(${bg})`,
-        backgroundSize: "cover"
+        backgroundSize: "cover",
     },
     container: {
         width: "50%",
@@ -84,6 +84,22 @@ export default {
         [sizes.down("xs")]: {
             gridTemplateColumns: "repeat(1,100%)",
             gridGap: "1rem",
+        }
+    },
+    footer: {
+        width: "100%",
+        paddingBottom: "10px",
+        marginTop: "10px",
+        display: "flex",
+        color: "rgba(0,0,0,0.7)",
+        fontSize: "larger",
+        fontWeight: "400",
+        justifyContent: "space-between",
+    },
+    footerLink: {
+        "&:hover": {
+            cursor: "pointer",
+            textDecoration: "underline"
         }
     }
 }

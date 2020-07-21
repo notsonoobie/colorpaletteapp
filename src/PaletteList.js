@@ -22,12 +22,16 @@ class PaletteList extends Component {
         super(props)
         this.state = {
             isDialogOpen: false,
+            isResetDialogOpen: false,
             deletingID: ""
         }
         this.goToPalette = this.goToPalette.bind(this)
         this.openDialog = this.openDialog.bind(this)
         this.closeDialog = this.closeDialog.bind(this)
         this.handleDelete = this.handleDelete.bind(this)
+        this.resetPalettes = this.resetPalettes.bind(this)
+        this.openResetDialog = this.openResetDialog.bind(this)
+        this.closeResetDialog = this.closeResetDialog.bind(this)
     }
     goToPalette(id) {
         this.props.history.push(`/palette/${id}`)
@@ -44,9 +48,24 @@ class PaletteList extends Component {
             deletingID: ""
         })
     }
+    openResetDialog(){
+        this.setState({
+            isResetDialogOpen: true
+        })
+    }
+    closeResetDialog(){
+        this.setState({
+            isResetDialogOpen: false
+        })
+    }
     handleDelete(){
         this.props.deletePalette(this.state.deletingID)
         this.closeDialog()
+    }
+    resetPalettes() {
+        window.localStorage.clear()
+        this.closeResetDialog()
+        window.location.reload(false)
     }
     render() {
         const { palettes, classes } = this.props;
@@ -60,6 +79,10 @@ class PaletteList extends Component {
                     <TransitionGroup className={classes.palettes}>
                         {palettes.map(p => <CSSTransition key={p.id} classNames="fade" timeout={500}><MiniPalette {...p} key={p.id} id={p.id} deletePalette={this.openDialog} handleClick={this.goToPalette} /></CSSTransition> )}
                     </TransitionGroup>
+                    <footer className={classes.footer}>
+                        <span onClick={this.openResetDialog} className={classes.footerLink}>Reset Palettes</span>
+                        <span>Copyright &copy; Rahul Gupta</span>
+                    </footer>
                 </div>
                 <Dialog open={this.state.isDialogOpen} onClose={this.closeDialog}>
                     <DialogTitle>Delete this palette?</DialogTitle>
@@ -73,6 +96,27 @@ class PaletteList extends Component {
                             <ListItemText primary='Delete' />
                         </ListItem>
                         <ListItem button onClick={this.closeDialog}>
+                            <ListItemAvatar>
+                                <Avatar style={{backgroundColor: red[100], color: red[600]}}>
+                                    <CloseIcon />
+                                </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText primary='Cancel' />
+                        </ListItem>
+                    </List>
+                </Dialog>
+                <Dialog open={this.state.isResetDialogOpen} onClose={this.closeResetDialog}>
+                    <DialogTitle>Reset to default palettes?</DialogTitle>
+                    <List>
+                        <ListItem button onClick={this.resetPalettes}>
+                            <ListItemAvatar>
+                                <Avatar style={{backgroundColor: blue[100], color: blue[600]}}>
+                                    <CheckIcon />
+                                </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText primary='Reset' />
+                        </ListItem>
+                        <ListItem button onClick={this.closeResetDialog}>
                             <ListItemAvatar>
                                 <Avatar style={{backgroundColor: red[100], color: red[600]}}>
                                     <CloseIcon />
