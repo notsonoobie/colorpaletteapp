@@ -81,7 +81,7 @@ class PaletteList extends Component {
                     </TransitionGroup>
                     <footer className={classes.footer}>
                         <span onClick={this.openResetDialog} className={classes.footerLink}>Reset Palettes</span>
-                        <span>Copyright &copy; Rahul Gupta</span>
+                        <span>Copyright &copy; 2020 Rahul Gupta</span>
                     </footer>
                 </div>
                 <Dialog open={this.state.isDialogOpen} onClose={this.closeDialog}>
